@@ -1,0 +1,6 @@
+/* Additional resume-specific styles */
+.print-only { display: none; }
+@media print {
+    .print-only { display: block; }
+    .no-print { display: none; }
+}
