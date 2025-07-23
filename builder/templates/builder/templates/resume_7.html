@@ -1,0 +1,252 @@
+
+{% extends 'builder/base.html' %}
+{% load static %}
+
+{% block title %}{{ profile.full_name }} - Resume{% endblock %}
+
+{% block extra_css %}
+<style>
+:root {
+    --primary-color: #2980b9;
+    --secondary-color: #3498db;
+    --accent-color: #e74c3c;
+    --text-color: #333;
+    --light-bg: #f8f9fa;
+}
+
+.resume-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    min-height: 100vh;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+.resume-header {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 2rem;
+    text-align: center;
+}
+
+.resume-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.resume-header p {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+.contact-info {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.resume-body {
+    padding: 2rem;
+}
+
+.section {
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--accent-color);
+}
+
+.experience-item, .education-item, .project-item {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    border-left: 3px solid var(--accent-color);
+    background: var(--light-bg);
+}
+
+.item-header {
+    display: flex;
+    justify-content: between;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+}
+
+.item-title {
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.item-company {
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.item-date {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.skill-item {
+    background: var(--light-bg);
+    padding: 0.75rem;
+    border-radius: 5px;
+    border-left: 3px solid var(--accent-color);
+}
+
+.skill-name {
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.skill-level {
+    color: var(--primary-color);
+    font-size: 0.9rem;
+}
+
+@media print {
+    .resume-container {
+        box-shadow: none;
+        max-width: none;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="resume-container">
+    <!-- Header Section -->
+    <div class="resume-header">
+        <h1>{{ profile.full_name }}</h1>
+        <p>Professional Resume</p>
+        <div class="contact-info">
+            <div class="contact-item">
+                <i class="bi bi-envelope"></i>
+                <span>{{ profile.email }}</span>
+            </div>
+            <div class="contact-item">
+                <i class="bi bi-telephone"></i>
+                <span>{{ profile.phone }}</span>
+            </div>
+            {% if profile.website %}
+            <div class="contact-item">
+                <i class="bi bi-globe"></i>
+                <a href="{{ profile.website }}" target="_blank" style="color: white;">Website</a>
+            </div>
+            {% endif %}
+            {% if profile.linkedin %}
+            <div class="contact-item">
+                <i class="bi bi-linkedin"></i>
+                <a href="{{ profile.linkedin }}" target="_blank" style="color: white;">LinkedIn</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Body Section -->
+    <div class="resume-body">
+        <!-- Professional Summary -->
+        {% if profile.summary %}
+        <div class="section">
+            <h2 class="section-title">Professional Summary</h2>
+            <p>{{ profile.summary }}</p>
+        </div>
+        {% endif %}
+
+        <!-- Experience -->
+        {% if profile.experiences.all %}
+        <div class="section">
+            <h2 class="section-title">Work Experience</h2>
+            {% for experience in profile.experiences.all %}
+            <div class="experience-item">
+                <div class="item-header">
+                    <div>
+                        <div class="item-title">{{ experience.position }}</div>
+                        <div class="item-company">{{ experience.company }}</div>
+                    </div>
+                    <div class="item-date">{{ experience.start_date }} - {{ experience.end_date }}</div>
+                </div>
+                <p>{{ experience.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Education -->
+        {% if profile.education.all %}
+        <div class="section">
+            <h2 class="section-title">Education</h2>
+            {% for education in profile.education.all %}
+            <div class="education-item">
+                <div class="item-header">
+                    <div>
+                        <div class="item-title">{{ education.degree }} in {{ education.field_of_study }}</div>
+                        <div class="item-company">{{ education.institution }}</div>
+                    </div>
+                    <div class="item-date">{{ education.start_date }} - {{ education.end_date }}</div>
+                </div>
+                {% if education.gpa %}
+                <p>GPA: {{ education.gpa }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Skills -->
+        {% if profile.skills.all %}
+        <div class="section">
+            <h2 class="section-title">Skills</h2>
+            <div class="skills-grid">
+                {% for skill in profile.skills.all %}
+                <div class="skill-item">
+                    <div class="skill-name">{{ skill.name }}</div>
+                    <div class="skill-level">{{ skill.proficiency }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Projects -->
+        {% if profile.projects.all %}
+        <div class="section">
+            <h2 class="section-title">Projects</h2>
+            {% for project in profile.projects.all %}
+            <div class="project-item">
+                <div class="item-header">
+                    <div>
+                        <div class="item-title">{{ project.name }}</div>
+                        <div class="item-company">{{ project.technologies }}</div>
+                    </div>
+                    <div class="item-date">{{ project.start_date }} - {{ project.end_date }}</div>
+                </div>
+                <p>{{ project.description }}</p>
+                {% if project.url %}
+                <p><a href="{{ project.url }}" target="_blank">View Project</a></p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

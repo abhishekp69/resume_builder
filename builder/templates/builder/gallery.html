@@ -1,0 +1,44 @@
+{% extends 'builder/base.html' %}
+{% load static %}
+
+{% block title %}Template Gallery{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="text-center mb-5">
+        <h2>Choose Your Template</h2>
+        <p class="lead">250+ Professional Resume Templates</p>
+    </div>
+
+    <div class="row">
+        {% for template in templates %}
+        <div class="col-md-4 col-lg-3 mb-4">
+            <div class="card template-card h-100">
+                <div class="card-img-top template-preview bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                    <div class="text-center">
+                        <i class="bi bi-file-earmark-text display-4 text-muted"></i>
+                        <p class="mt-2 mb-0"><strong>Template {{ template.id }}</strong></p>
+                    </div>
+                </div>
+                <div class="card-body text-center">
+                    <h6 class="card-title">{{ template.name }}</h6>
+                    <a href="{% url 'index' %}?template={{ template.id }}" class="btn btn-primary btn-sm">
+                        Use Template
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+.template-card {
+    transition: transform 0.2s;
+}
+.template-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+</style>
+{% endblock %}

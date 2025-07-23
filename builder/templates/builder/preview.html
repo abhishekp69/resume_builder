@@ -1,0 +1,37 @@
+{% extends 'builder/base.html' %}
+{% load static %}
+
+{% block title %}Resume Preview - {{ profile.full_name }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    {% if not is_pdf %}
+    <div class="text-center mb-4">
+        <h2>Resume Preview</h2>
+        <p class="text-muted">Template {{ template_num }} - {{ profile.full_name }}</p>
+        <div class="btn-group" role="group">
+            <a href="{% url 'edit_resume' profile.pk %}" class="btn btn-outline-primary">
+                <i class="bi bi-pencil"></i> Edit Resume
+            </a>
+            {% if pdf_enabled %}
+            <a href="{% url 'download_pdf' profile.pk %}" class="btn btn-success">
+                <i class="bi bi-download"></i> Download PDF
+            </a>
+            {% endif %}
+            <a href="{% url 'index' %}" class="btn btn-outline-secondary">
+                <i class="bi bi-plus"></i> Create New
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="resume-preview-container">
+        <!-- This will be replaced by the actual resume template -->
+        <div class="alert alert-info text-center">
+            <h4>Resume Template {{ template_num }}</h4>
+            <p>Your resume with template {{ template_num }} will appear here.</p>
+            <p>Currently showing basic layout. Individual templates (1-250) will have unique designs.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

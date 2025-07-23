@@ -1,0 +1,221 @@
+{% extends 'builder/base.html' %}
+{% load static %}
+
+{% block title %}Create Your Resume{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">
+                        <i class="bi bi-file-earmark-plus"></i>
+                        {% if is_edit %}Edit Your Resume{% else %}Create Your Resume{% endif %}
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" id="resume-form">
+                        {% csrf_token %}
+
+                        <!-- Personal Information -->
+                        <div class="section-header">
+                            <h4><i class="bi bi-person"></i> Personal Information</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">{{ profile_form.full_name.label }}</label>
+                                {{ profile_form.full_name }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">{{ profile_form.email.label }}</label>
+                                {{ profile_form.email }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">{{ profile_form.phone.label }}</label>
+                                {{ profile_form.phone }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">{{ profile_form.template_choice.label }}</label>
+                                {{ profile_form.template_choice }}
+                                <div class="form-text">Choose from 1-250 templates</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">{{ profile_form.website.label }}</label>
+                                {{ profile_form.website }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">{{ profile_form.linkedin.label }}</label>
+                                {{ profile_form.linkedin }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">{{ profile_form.github.label }}</label>
+                                {{ profile_form.github }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">{{ profile_form.address.label }}</label>
+                            {{ profile_form.address }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">{{ profile_form.summary.label }}</label>
+                            {{ profile_form.summary }}
+                        </div>
+
+                        <!-- Experience Section -->
+                        <div class="section-header">
+                            <h4><i class="bi bi-briefcase"></i> Work Experience</h4>
+                        </div>
+                        <div id="experience-formset">
+                            {{ experience_formset.management_form }}
+                            {% for form in experience_formset %}
+                                <div class="formset-form border rounded p-3 mb-3">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Company</label>
+                                            {{ form.company }}
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Position</label>
+                                            {{ form.position }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Start Date</label>
+                                            {{ form.start_date }}
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">End Date</label>
+                                            {{ form.end_date }}
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Description</label>
+                                        {{ form.description }}
+                                    </div>
+                                    {{ form.DELETE }}
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Education Section -->
+                        <div class="section-header">
+                            <h4><i class="bi bi-mortarboard"></i> Education</h4>
+                        </div>
+                        <div id="education-formset">
+                            {{ education_formset.management_form }}
+                            {% for form in education_formset %}
+                                <div class="formset-form border rounded p-3 mb-3">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Institution</label>
+                                            {{ form.institution }}
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Degree</label>
+                                            {{ form.degree }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label">Field of Study</label>
+                                            {{ form.field_of_study }}
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label">Start Date</label>
+                                            {{ form.start_date }}
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label">End Date</label>
+                                            {{ form.end_date }}
+                                        </div>
+                                    </div>
+                                    {{ form.DELETE }}
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Skills Section -->
+                        <div class="section-header">
+                            <h4><i class="bi bi-gear"></i> Skills</h4>
+                        </div>
+                        <div id="skill-formset">
+                            {{ skill_formset.management_form }}
+                            <div class="row">
+                                {% for form in skill_formset %}
+                                    <div class="col-md-6 mb-3">
+                                        <div class="border rounded p-2">
+                                            <div class="mb-2">
+                                                <label class="form-label">Skill</label>
+                                                {{ form.name }}
+                                            </div>
+                                            <div class="mb-2">
+                                                <label class="form-label">Level</label>
+                                                {{ form.proficiency }}
+                                            </div>
+                                            {{ form.DELETE }}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Projects Section -->
+                        <div class="section-header">
+                            <h4><i class="bi bi-code-square"></i> Projects</h4>
+                        </div>
+                        <div id="project-formset">
+                            {{ project_formset.management_form }}
+                            {% for form in project_formset %}
+                                <div class="formset-form border rounded p-3 mb-3">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Project Name</label>
+                                            {{ form.name }}
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Technologies</label>
+                                            {{ form.technologies }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label">URL</label>
+                                            {{ form.url }}
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label">Start Date</label>
+                                            {{ form.start_date }}
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label">End Date</label>
+                                            {{ form.end_date }}
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Description</label>
+                                        {{ form.description }}
+                                    </div>
+                                    {{ form.DELETE }}
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-check-circle"></i>
+                                {% if is_edit %}Update Resume{% else %}Create Resume{% endif %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
