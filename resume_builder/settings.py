@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'builder',
+    'django_distill',
 ]
 
 MIDDLEWARE = [
